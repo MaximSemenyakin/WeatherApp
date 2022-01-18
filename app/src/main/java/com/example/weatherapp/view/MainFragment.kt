@@ -6,10 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.weatherapp.R
 import com.example.weatherapp.databinding.MainFragmentBinding
 import com.example.weatherapp.viewmodel.AppCondition
 import com.example.weatherapp.viewmodel.MainViewModel
@@ -64,6 +62,11 @@ class MainFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }
