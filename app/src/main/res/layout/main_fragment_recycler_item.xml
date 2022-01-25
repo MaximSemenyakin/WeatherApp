@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="26sp"
-        android:layout_margin="8dp"
+        android:textSize="@dimen/default_text_size"
+        android:layout_margin="@dimen/default_margin"
         tools:text="Moscow"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="@dimen/margin_for_view_recycler"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_fragment_recycler_item_tv"/>
