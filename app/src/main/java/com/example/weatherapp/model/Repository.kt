@@ -3,6 +3,11 @@ package com.example.weatherapp.model
 class Repository : RepositoryImpl {
 
     override fun getWeather(): CityInfo =
-        CityInfo("Krasnodar", 2)
+        CityInfo(City("Krasnodar", 3), 2)
+
+    override fun getWeatherFromLocalStorageRus() =  getRussianCities()
+
+
+    override fun getWeatherFromLocalStorageForeign() = getForeignCity()
 
 }
