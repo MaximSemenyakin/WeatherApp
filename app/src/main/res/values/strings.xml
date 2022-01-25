@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="Error">Something went wrong</string>
+    <string name="Reload">Please, try to reload</string>
 </resources>

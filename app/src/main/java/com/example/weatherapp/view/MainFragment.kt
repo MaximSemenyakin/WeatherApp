@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.MainFragmentBinding
@@ -20,22 +19,29 @@ class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel:MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
+
     private val adapter = MainFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemClick(weather: CityInfo) {
-            val manager = activity?.supportFragmentManager
-            if (manager != null) {
-                val bundle = Bundle()
-                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
-                manager.beginTransaction()
-                    .replace(R.id.container, DetailsFragment.newInstance(bundle))
+            activity?.supportFragmentManager?.apply {
+                beginTransaction()
+                    .replace(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+                    }))
                     .addToBackStack("")
                     .commit()
             }
         }
     })
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,8 +50,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mainRecyclerView.adapter = adapter
         binding.mainFloatingButton.setOnClickListener { changeWeatherData() }
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { getData(it) })
+        viewModel.getLiveData().observe(viewLifecycleOwner, { getData(it) })
         viewModel.getWeatherFromLocalRus()
     }
 
@@ -61,7 +66,7 @@ class MainFragment : Fragment() {
     }
 
     private fun getData(state: AppCondition) {
-        when(state) {
+        when (state) {
             is AppCondition.Success -> {
                 binding.loadingView.visibility = View.GONE
                 binding.mainRecyclerView.isVisible = true
@@ -72,12 +77,23 @@ class MainFragment : Fragment() {
                 binding.mainRecyclerView.isVisible = false
             }
             is AppCondition.Error -> {
-                Snackbar
-                    .make(binding.mainFloatingButton, "Error", Snackbar.LENGTH_SHORT)
-                    .setAction("Reload") {viewModel.getWeatherFromLocalRus()}
-                    .show()
+                binding.loadingView.visibility = View.GONE
+                binding.mainFragmentContainer.showSnackBar(
+                    getString(R.string.Error),
+                    getString(R.string.Reload),
+                    { viewModel.getWeatherFromLocalRus() }
+                )
             }
         }
+    }
+
+    private fun View.showSnackBar(
+        text: String,
+        actionText: String,
+        action: (View) -> Unit,
+        length: Int = Snackbar.LENGTH_SHORT
+    ) {
+        Snackbar.make(this, text, length).setAction(actionText, action).show()
     }
 
     companion object {

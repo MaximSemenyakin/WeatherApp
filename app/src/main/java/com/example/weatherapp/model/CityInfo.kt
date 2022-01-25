@@ -8,8 +8,7 @@ data class CityInfo (val city: City = getDefaultCity(), val temperature: Int): P
 
 fun getDefaultCity() = City("Краснодар", -2)
 
-fun getForeignCity(): List<CityInfo> {
-    return listOf(
+fun getForeignCity() = listOf(
         CityInfo(City("Лондон", -3), -3),
         CityInfo(City("Рим", -3), -3),
         CityInfo(City("Париж", -3), -3),
@@ -21,10 +20,8 @@ fun getForeignCity(): List<CityInfo> {
         CityInfo(City("Берлин", -3), -3),
         CityInfo(City("Мадрид", -3), -3)
         )
-}
 
-fun getRussianCities(): List<CityInfo> {
-    return listOf(
+fun getRussianCities() = listOf(
         CityInfo(City("Москва", -3), -3),
         CityInfo(City("Санкт-Петербург", -3), -3),
         CityInfo(City("Ростов", -3), -3),
@@ -35,4 +32,3 @@ fun getRussianCities(): List<CityInfo> {
         CityInfo(City("Мурманск", -3), -3),
         CityInfo(City("Архангельск", -3), -3),
     )
-}
